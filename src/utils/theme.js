@@ -10,9 +10,6 @@ const themeOptions = {
   },
   typography: {
     fontFamily: 'Poppins',
-    button: {
-      fontWeight: 700,
-    },
   },
 };
 
