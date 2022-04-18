@@ -1,5 +1,4 @@
 # examily-client
-Online Quiz Platform
+Online Test Platform
 
-![exm](https://user-images.githubusercontent.com/47267731/163664815-d57e9aae-3aa2-43c5-9416-70963d0e3803.png)
-
+<img width="1792" alt="Screenshot 2022-04-18 at 12 33 15 PM" src="https://user-images.githubusercontent.com/47267731/163769639-e1423314-7315-4282-a837-b12cbc535150.png">
