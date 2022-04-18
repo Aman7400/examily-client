@@ -9,3 +9,7 @@
 body {
   font-family: 'Poppins';
 }
+
+.heading-text-shadow {
+  text-shadow: 0 0px 10px #00000025;
+}

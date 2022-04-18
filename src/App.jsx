@@ -3,15 +3,18 @@ import { Route, Routes } from 'react-router-dom';
 import { Button } from '@mui/material';
 import Landing from './pages/Landing';
 import React from 'react';
+import Register from './pages/Register';
+
+// TODO - Add Responsive CSS
 
 const App = () => {
   return (
     <div>
       <Routes>
-        <Route path='/' exact element={<p>Wekcome to Examily</p>} />
+        <Route path='/' exact element={<p>Welcome to Examily</p>} />
         <Route path='/landing' element={<Landing />} />
         <Route path='/login' element={<p>Login</p>} />
-        <Route path='/register' element={<p>Register</p>} />
+        <Route path='/register' element={<Register />} />
       </Routes>
     </div>
   );
