@@ -16,8 +16,12 @@ const Landing = () => {
         {/* Logo - Brand */}
         <Typography
           variant='h4'
+          component={RouterLink}
+          to='/landing'
           sx={{
             fontWeight: 'bold',
+            textDecoration: 'none',
+            color: '#000',
             '>span': {
               color: 'secondary.main',
             },
@@ -31,10 +35,15 @@ const Landing = () => {
           <Button variant='text' size='large' color='inherit'>
             Buy
           </Button>
-          <Button variant='text' size='large' color='inherit'>
+          <Button
+            variant='text'
+            component={RouterLink}
+            to='/login'
+            size='large'
+            color='inherit'
+          >
             Login
           </Button>
-
           <Button
             component={RouterLink}
             to='/register'
