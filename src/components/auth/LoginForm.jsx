@@ -1,3 +1,5 @@
+import * as yup from 'yup';
+
 import {
   Box,
   Button,
@@ -7,10 +9,22 @@ import {
   Typography,
   styled,
 } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { Icon } from '@iconify/react';
-import { Link } from 'react-router-dom';
+import { LoadingButton } from '@mui/lab';
 import React from 'react';
+import axios from 'axios';
+import { useForm } from 'react-hook-form';
+import { useSnackbar } from 'notistack';
+import { yupResolver } from '@hookform/resolvers/yup';
+
+const loginSchema = yup
+  .object({
+    email: yup.string().email('Email is invalid').required('Email is required'),
+    password: yup.string().required('Password is required'),
+  })
+  .required();
 
 const StyledForm = styled('form')(({ theme }) => ({
   width: '560px',
@@ -20,6 +34,35 @@ const StyledForm = styled('form')(({ theme }) => ({
 }));
 
 const LoginForm = () => {
+  const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: yupResolver(loginSchema),
+  });
+  const onSubmit = async (data) => {
+    console.log(data);
+    try {
+      console.log(import.meta.env.VITE_BACKEND_URL);
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/auth/login`,
+        data
+      );
+      console.log(res);
+      localStorage.setItem('token', res.data.token);
+      enqueueSnackbar(res.data.message, { variant: 'success' });
+      reset({ email: '', password: '' });
+      navigate('/');
+    } catch (error) {
+      console.log(error.response.data.message);
+      enqueueSnackbar(error.response.data.message, { variant: 'error' });
+    }
+  };
+
   return (
     <StyledForm>
       <Button
@@ -43,6 +86,9 @@ const LoginForm = () => {
           label='Email'
           type='email'
           fullWidth
+          {...register('email')}
+          error={Boolean(errors.email?.message)}
+          helperText={errors.email?.message}
         />
       </FormControl>
       <FormControl fullWidth margin='normal'>
@@ -51,12 +97,21 @@ const LoginForm = () => {
           label='Password'
           type='password'
           fullWidth
+          {...register('password')}
+          error={Boolean(errors.password?.message)}
+          helperText={errors.password?.message}
         />
       </FormControl>
       <Stack sx={{ mt: 2 }}>
-        <Button color='secondary' size='large' variant='contained'>
+        <LoadingButton
+          onClick={handleSubmit(onSubmit)}
+          loading={isSubmitting}
+          color='secondary'
+          size='large'
+          variant='contained'
+        >
           Login
-        </Button>
+        </LoadingButton>
       </Stack>
 
       <Stack
