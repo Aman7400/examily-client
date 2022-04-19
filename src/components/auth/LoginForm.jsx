@@ -8,6 +8,7 @@ import {
   styled,
 } from '@mui/material';
 
+import { Icon } from '@iconify/react';
 import { Link } from 'react-router-dom';
 import React from 'react';
 
@@ -21,6 +22,16 @@ const StyledForm = styled('form')(({ theme }) => ({
 const LoginForm = () => {
   return (
     <StyledForm>
+      <Button
+        size='small'
+        startIcon={<Icon icon='oi:home' />}
+        color='secondary'
+        component={Link}
+        to='/landing'
+        sx={{ mb: 1 }}
+      >
+        Home
+      </Button>
       <Typography variant='h4' color='secondary' sx={{ mb: 5 }}>
         Login to your account
       </Typography>
