@@ -1,6 +1,7 @@
+import { Navigate, Outlet } from 'react-router-dom';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Navigate } from 'react-router-dom';
+import Navbar from '../../components/dashboard/Navbar';
 import axios from 'axios';
 
 const Dashboard = () => {
@@ -42,9 +43,10 @@ const Dashboard = () => {
     <Navigate to='/landing' />
   ) : (
     <div>
-      {/* <SideBar user={userProfile} /> */}
+      <Navbar user={userProfile} />
       <div>
         <p>{userProfile.firstName}</p>
+        <Outlet />
       </div>
     </div>
   );
