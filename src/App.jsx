@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { Button } from '@mui/material';
-import Dashboard from './pages/dashboard/dashboard';
+import Dashboard from './pages/dashboard/Dashboard';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import React from 'react';
