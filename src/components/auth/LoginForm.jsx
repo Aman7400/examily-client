@@ -10,6 +10,7 @@ import {
   styled,
 } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
+import { examiner, student } from '../../utils/routes';
 
 import { Icon } from '@iconify/react';
 import { LoadingButton } from '@mui/lab';
@@ -56,7 +57,11 @@ const LoginForm = () => {
       localStorage.setItem('token', res.data.token);
       enqueueSnackbar(res.data.message, { variant: 'success' });
       reset({ email: '', password: '' });
-      navigate('/');
+      if (res.data.userType === 'Examiner') {
+        navigate(examiner.home);
+      } else {
+        navigate(student.home);
+      }
     } catch (error) {
       console.log(error.response.data.message);
       enqueueSnackbar(error.response.data.message, { variant: 'error' });

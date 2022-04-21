@@ -9,7 +9,9 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
+import { examiner, general, student } from '../../utils/routes';
 
+import { Icon } from '@iconify/react';
 import { Link } from 'react-router-dom';
 import React from 'react';
 
@@ -44,13 +46,25 @@ const Navbar = ({ user }) => {
           </Typography>
           <Button
             component={Link}
-            to={userType === 'Examiner' ? '/test/new' : '/tests/all'}
+            variant='contained'
+            color='secondary'
+            sx={{ mr: 1 }}
+            to={userType === 'Examiner' ? examiner.home : student.home}
+          >
+            Home
+          </Button>
+          <Button
+            component={Link}
+            to={
+              userType === 'Examiner' ? examiner.createTest : student.allTests
+            }
             variant='contained'
             color='secondary'
             sx={{ mr: 1 }}
           >
             {userType === 'Examiner' ? 'Create Test' : 'Take Test'}
           </Button>
+
           <IconButton onClick={handleClick}>
             <Avatar>{fLetter}</Avatar>
           </IconButton>
@@ -63,7 +77,11 @@ const Navbar = ({ user }) => {
               'aria-labelledby': 'basic-button',
             }}
           >
-            <MenuItem component={Link} to='/profile' onClick={handleClose}>
+            <MenuItem
+              component={Link}
+              to={general.profile}
+              onClick={handleClose}
+            >
               My Profile
             </MenuItem>
             <MenuItem onClick={handleLogOut}>Logout</MenuItem>
