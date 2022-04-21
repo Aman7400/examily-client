@@ -62,7 +62,7 @@ const Navbar = ({ user }) => {
             color='secondary'
             sx={{ mr: 1 }}
           >
-            {userType === 'Examiner' ? 'Create Test' : 'Take Test'}
+            {userType === 'Examiner' ? 'New Test' : 'Take Test'}
           </Button>
 
           <IconButton onClick={handleClick}>

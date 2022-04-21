@@ -14,20 +14,29 @@ import {
   Paper,
   Radio,
   RadioGroup,
+  Stack,
   TextField,
   Typography,
 } from '@mui/material';
 
+import { Icon } from '@iconify/react';
 import React from 'react';
 import SimpleAccordion from '../../../components/dashboard/Accordion';
 
 const CreateExam = () => {
   return (
     <Box sx={{ p: 10 }}>
-      <Box sx={{ mb: 2 }}>
-        <Typography variant='h3'>Create New Exam</Typography>
-        <Typography variant='body1'>*All Fields are Required</Typography>
-      </Box>
+      <Stack direction='row' sx={{ mb: 2 }}>
+        <Box sx={{ flexGrow: 1 }}>
+          <Typography variant='h3'>Create New Exam</Typography>
+          <Typography variant='body1'>*All Fields are Required</Typography>
+        </Box>
+        <Box>
+          <Button variant='contained' size='large'>
+            Create
+          </Button>
+        </Box>
+      </Stack>
       <Card sx={{ p: 5 }} component={Paper}>
         <Grid container spacing={5}>
           <Grid item xs={12} md={6} lg={4}>
