@@ -18,46 +18,67 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { DesktopDatePicker, LocalizationProvider } from '@mui/lab';
 
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { Icon } from '@iconify/react';
 import React from 'react';
 import SimpleAccordion from '../../../components/dashboard/Accordion';
 
 const CreateExam = () => {
+  const [value, setValue] = React.useState(new Date());
+
+  const handleChange = (newValue) => {
+    setValue(newValue);
+  };
   return (
-    <Box sx={{ p: 10 }}>
-      <Stack direction='row' sx={{ mb: 2 }}>
-        <Box sx={{ flexGrow: 1 }}>
-          <Typography variant='h3'>Create New Exam</Typography>
-          <Typography variant='body1'>*All Fields are Required</Typography>
-        </Box>
-        <Box>
-          <Button variant='contained' size='large'>
-            Create
-          </Button>
-        </Box>
-      </Stack>
-      <Card sx={{ p: 5 }} component={Paper}>
-        <Grid container spacing={5}>
-          <Grid item xs={12} md={6} lg={4}>
-            <TextField fullWidth label='Name*' />
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <Box sx={{ p: 10 }}>
+        <Stack direction='row' sx={{ mb: 2 }}>
+          <Box sx={{ flexGrow: 1 }}>
+            <Typography variant='h3'>Create New Exam</Typography>
+            <Typography variant='body1'>*All Fields are Required</Typography>
+          </Box>
+          <Box>
+            <Button variant='contained' size='large'>
+              Create
+            </Button>
+          </Box>
+        </Stack>
+        <Card sx={{ p: 5 }} component={Paper}>
+          <Grid container spacing={5}>
+            <Grid item xs={12} md={6} lg={4}>
+              <TextField fullWidth label='Name*' />
+            </Grid>
+            <Grid item xs={12} md={6} lg={4}>
+              <TextField fullWidth label='Description' />
+            </Grid>
+            <Grid item xs={12} md={6} lg={4}>
+              <DesktopDatePicker
+                label='Starts On*'
+                inputFormat='dd/MM/yyyy'
+                value={value}
+                onChange={handleChange}
+                renderInput={(params) => <TextField {...params} fullWidth />}
+              />
+            </Grid>
+            <Grid item xs={12} md={6} lg={4}>
+              <DesktopDatePicker
+                label='Expires On*'
+                inputFormat='dd/MM/yyyy'
+                value={value}
+                onChange={handleChange}
+                renderInput={(params) => <TextField {...params} fullWidth />}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={12} md={6} lg={4}>
-            <TextField fullWidth label='Description' />
-          </Grid>
-          <Grid item xs={12} md={6} lg={4}>
-            <TextField fullWidth label='Starts On*' />
-          </Grid>
-          <Grid item xs={12} md={6} lg={4}>
-            <TextField fullWidth label='Expires In*' />
-          </Grid>
-        </Grid>
-        {/* Question Form */}
-        <FormDialog />
-        {/* Questions Accordion */}
-        <SimpleAccordion />
-      </Card>
-    </Box>
+          {/* Question Form */}
+          <FormDialog />
+          {/* Questions Accordion */}
+          <SimpleAccordion />
+        </Card>
+      </Box>
+    </LocalizationProvider>
   );
 };
 
