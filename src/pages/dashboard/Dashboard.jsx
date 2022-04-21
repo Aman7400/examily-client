@@ -1,6 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import React, { useCallback, useEffect, useState } from 'react';
 
+import { Box } from '@mui/material';
 import Navbar from '../../components/dashboard/Navbar';
 import axios from 'axios';
 
@@ -42,13 +43,12 @@ const Dashboard = () => {
   ) : !isLoggedIn ? (
     <Navigate to='/landing' />
   ) : (
-    <div>
+    <Box sx={{ width: '100%', minHeight: '100vh' }}>
       <Navbar user={userProfile} />
       <div>
-        <p>{userProfile.firstName}</p>
         <Outlet />
       </div>
-    </div>
+    </Box>
   );
 };
 

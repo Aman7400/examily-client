@@ -2,7 +2,9 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { examiner, general, student } from './utils/routes';
 
 import { Button } from '@mui/material';
+import CreateExam from './pages/dashboard/examiner/CreateExam';
 import Dashboard from './pages/dashboard/Dashboard';
+import Home from './pages/dashboard/examiner/Home';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import NotFound from './pages/dashboard/NotFound';
@@ -27,11 +29,8 @@ const App = () => {
           <Route path={student.takeTest} element={<p>Student Take Test</p>} />
 
           {/* Examiner Route */}
-          <Route path={examiner.home} element={<p>Examiner Home</p>} />
-          <Route
-            path={examiner.createTest}
-            element={<p>Examiner Create Test</p>}
-          />
+          <Route path={examiner.home} element={<Home />} />
+          <Route path={examiner.createTest} element={<CreateExam />} />
           {/* Unauthorized */}
           <Route path='/unauthorised' element={<UnAuthorised />} />
           {/* FallBacks */}
