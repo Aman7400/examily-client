@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { Box, IconButton, Stack } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -9,28 +10,25 @@ import { Icon } from '@iconify/react';
 import Typography from '@mui/material/Typography';
 
 const ExpandMoreIcon = <Icon icon='flat-color-icons:expand' />;
-
 export default function SimpleAccordion() {
-  return (
+  const questions = useSelector((state) => state.questions.value);
+  console.log({ questions });
+  return questions.length > 0 ? (
     <div>
-      {[1, 2, 3, 4, 5].map((_, i) => (
+      {questions.map((q, i) => (
         <Accordion sx={{ p: 1 }} key={i}>
           <AccordionSummary expandIcon={ExpandMoreIcon}>
             <Typography variant='h6' sx={{ flexGrow: 1 }} component='h6'>
-              # {i} - Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-              A voluptates maxime rerum, magni facilis dignissimos totam? Magnam
-              quisquam excepturi nam dolores cupiditate reiciendis nostrum qui
-              ratione quaerat ipsam! Reiciendis, labore.
+              # {i} - {q.title}
             </Typography>
           </AccordionSummary>
           <AccordionDetails sx={{ p: 2 }}>
-            <p>Opt1</p>
-            <p>opt2</p>
-            <p>opt3</p>
-            <p>opt4</p>
+            {q.options.map((opt, _i) => (
+              <p key={_i}>{opt}</p>
+            ))}
             <Stack direction='row' sx={{ alignItems: 'center' }}>
               <Typography sx={{ flexGrow: 1 }} variant='body1'>
-                Correct Answer : Opt1
+                Correct Answer : {q.correctAnswer}
               </Typography>
               <IconButton>
                 <Icon icon='clarity:edit-solid' />
@@ -43,5 +41,7 @@ export default function SimpleAccordion() {
         </Accordion>
       ))}
     </div>
+  ) : (
+    <p>No questions</p>
   );
 }

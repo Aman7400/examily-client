@@ -19,6 +19,8 @@ import {
   Typography,
 } from '@mui/material';
 import { DesktopDatePicker, LocalizationProvider } from '@mui/lab';
+import { add, remove } from '../../../redux/slices/questions';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { Icon } from '@iconify/react';
@@ -36,7 +38,7 @@ const CreateExam = () => {
       <Box sx={{ p: 10 }}>
         <Stack direction='row' sx={{ mb: 2 }}>
           <Box sx={{ flexGrow: 1 }}>
-            <Typography variant='h3'>Create New Exam</Typography>
+            <Typography variant='h3'>Create New Quiz</Typography>
             <Typography variant='body1'>*All Fields are Required</Typography>
           </Box>
           <Box>
@@ -86,6 +88,7 @@ export default CreateExam;
 
 function FormDialog() {
   const [open, setOpen] = React.useState(false);
+  const dispatch = useDispatch();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -93,6 +96,19 @@ function FormDialog() {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleAddQuestion = () => {
+    const question = {
+      title: "India's Capital City is",
+      options: ['Chennai', 'Jaipur', 'Lucknow', 'Delhi'],
+      correctAnswer: 4,
+    };
+    dispatch(
+      add({
+        question,
+      })
+    );
   };
 
   return (
@@ -160,7 +176,11 @@ function FormDialog() {
             <Button variant='outlined' size='large' onClick={handleClose}>
               Cancel
             </Button>
-            <Button variant='contained' size='large' onClick={handleClose}>
+            <Button
+              variant='contained'
+              size='large'
+              onClick={handleAddQuestion}
+            >
               Save
             </Button>
           </DialogActions>
