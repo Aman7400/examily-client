@@ -1,3 +1,5 @@
+import * as yup from 'yup';
+
 import {
   Box,
   Button,
@@ -26,6 +28,9 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { Icon } from '@iconify/react';
 import React from 'react';
 import SimpleAccordion from '../../../components/dashboard/Accordion';
+import { useForm } from 'react-hook-form';
+import { useSnackbar } from 'notistack';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 const CreateExam = () => {
   const [value, setValue] = React.useState(new Date());
@@ -90,25 +95,197 @@ function FormDialog() {
   const [open, setOpen] = React.useState(false);
   const dispatch = useDispatch();
 
+  const [title, setTitle] = React.useState('');
+  const [titleError, setTitleError] = React.useState({
+    hasError: false,
+    error: '',
+  });
+  const [options, setOptions] = React.useState({
+    opt1: '',
+    opt2: '',
+    opt3: '',
+    opt4: '',
+  });
+
+  const [opt1Error, setOpt1Error] = React.useState({
+    hasError: false,
+    error: '',
+  });
+  const [opt2Error, setOpt2Error] = React.useState({
+    hasError: false,
+    error: '',
+  });
+  const [opt3Error, setOpt3Error] = React.useState({
+    hasError: false,
+    error: '',
+  });
+  const [opt4Error, setOpt4Error] = React.useState({
+    hasError: false,
+    error: '',
+  });
+
+  const [correctAnswer, setCorrectAnswer] = React.useState('1');
+  const [correctAnswerError, setCorrectAnswerError] = React.useState({
+    hasError: false,
+    error: '',
+  });
+
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
+    emptyFormState();
+    setTitleError({ hasError: false, error: '' });
+    resetOptionErrors();
+    setCorrectAnswerError({ hasError: false, error: '' });
     setOpen(false);
   };
 
+  const emptyFormState = () => {
+    setTitle('');
+    setOptions({
+      opt1: '',
+      opt2: '',
+      opt3: '',
+      opt4: '',
+    });
+    setCorrectAnswer('1');
+  };
+
+  const resetOptionErrors = () => {
+    setOpt1Error({ hasError: false, error: '' });
+    setOpt2Error({ hasError: false, error: '' });
+    setOpt3Error({ hasError: false, error: '' });
+    setOpt4Error({ hasError: false, error: '' });
+  };
+
   const handleAddQuestion = () => {
-    const question = {
-      title: "India's Capital City is",
-      options: ['Chennai', 'Jaipur', 'Lucknow', 'Delhi'],
-      correctAnswer: 4,
-    };
-    dispatch(
-      add({
-        question,
-      })
-    );
+    try {
+      // * Reset Errors
+      setTitleError({ hasError: false, error: '' });
+      resetOptionErrors();
+      setCorrectAnswerError({ hasError: false, error: '' });
+
+      const { opt1, opt2, opt3, opt4 } = options;
+
+      // * Validate Title
+      if (!title) {
+        return setTitleError({ hasError: true, error: 'Invalid Title' });
+      }
+      if (title === '') {
+        return setTitleError({ hasError: true, error: 'Title is required' });
+      }
+      if (title.length < 10) {
+        return setTitleError({
+          hasError: true,
+          error: 'Title must be min 10 Characters long',
+        });
+      }
+
+      // * Validate Options
+      if (!opt1) {
+        return setOpt1Error({ hasError: true, error: 'Invalid Option' });
+      }
+      if (opt1.length < 1) {
+        return setOpt1Error({
+          hasError: true,
+          error: 'Option must be at least 1 character long',
+        });
+      }
+      if (opt1 === ' ') {
+        return setOpt1Error({
+          hasError: true,
+          error: 'Empty Option are not allowed',
+        });
+      }
+
+      if (!opt2) {
+        return setOpt2Error({ hasError: true, error: 'Invalid Option' });
+      }
+      if (opt2.length < 1) {
+        return setOpt2Error({
+          hasError: true,
+          error: 'Option must be at least 1 character long',
+        });
+      }
+      if (opt2 === ' ') {
+        return setOpt2Error({
+          hasError: true,
+          error: 'Empty Option are not allowed',
+        });
+      }
+
+      if (!opt3) {
+        return setOpt3Error({ hasError: true, error: 'Invalid Option' });
+      }
+      if (opt3.length < 1) {
+        return setOpt3Error({
+          hasError: true,
+          error: 'Option must be at least 1 character long',
+        });
+      }
+      if (opt3 === ' ') {
+        return setOpt3Error({
+          hasError: true,
+          error: 'Empty Option are not allowed',
+        });
+      }
+
+      if (!opt4) {
+        return setOpt4Error({ hasError: true, error: 'Invalid Option' });
+      }
+      if (opt4.length < 1) {
+        return setOpt4Error({
+          hasError: true,
+          error: 'Option must be at least 1 character long',
+        });
+      }
+      if (opt4 === ' ') {
+        return setOpt4Error({
+          hasError: true,
+          error: 'Empty Option are not allowed',
+        });
+      }
+
+      // * Validate Correct Answer
+      if (!correctAnswer) {
+        return setCorrectAnswerError({
+          hasError: true,
+          error: 'Please select a correct answer',
+        });
+      }
+      if (Number(correctAnswer) > 5) {
+        return setCorrectAnswerError({
+          hasError: true,
+          error: 'Invalid Correct Answer',
+        });
+      }
+
+      const question = {
+        title,
+        options: [opt1, opt2, opt3, opt4],
+        correctAnswer,
+      };
+      dispatch(
+        add({
+          question,
+        })
+      );
+      handleClose();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleAddOptions = (e) => {
+    const { name, value } = e.target;
+    console.log(name);
+
+    setOptions((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   return (
@@ -128,49 +305,65 @@ function FormDialog() {
             <TextField
               autoFocus
               margin='dense'
-              id='name'
               label='Title'
-              type='email'
+              name='title'
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              helperText={titleError.hasError && titleError.error}
+              error={titleError.hasError}
               fullWidth
               variant='outlined'
             />
             <TextField
-              autoFocus
               margin='dense'
-              id='name'
               label='Option 1'
-              type='email'
+              name='opt1'
+              value={options.opt1}
+              onChange={handleAddOptions}
+              error={opt1Error.hasError}
+              helperText={opt1Error.hasError && opt1Error.error}
               fullWidth
               variant='outlined'
             />
             <TextField
-              autoFocus
               margin='dense'
-              id='name'
               label='Option 2'
-              type='email'
+              name='opt2'
+              value={options.opt2}
+              onChange={handleAddOptions}
+              error={opt2Error.hasError}
+              helperText={opt2Error.hasError && opt2Error.error}
               fullWidth
               variant='outlined'
             />
             <TextField
-              autoFocus
               margin='dense'
-              id='name'
               label='Option 3'
-              type='email'
+              name='opt3'
+              value={options.opt3}
+              onChange={handleAddOptions}
+              error={opt3Error.hasError}
+              helperText={opt3Error.hasError && opt3Error.error}
               fullWidth
               variant='outlined'
             />
             <TextField
-              autoFocus
               margin='dense'
-              id='name'
               label='Option 4'
-              type='email'
+              name='opt4'
+              value={options.opt4}
+              onChange={handleAddOptions}
+              error={opt4Error.hasError}
+              helperText={opt4Error.hasError && opt4Error.error}
               fullWidth
               variant='outlined'
             />
-            <RowRadioButtonsGroup />
+            {/* Correct Answer */}
+            <CorrectAnswerRadioButtons
+              correctAnswerError={correctAnswerError}
+              setCorrectAnswer={setCorrectAnswer}
+              correctAnswer={correctAnswer}
+            />
           </DialogContent>
           <DialogActions>
             <Button variant='outlined' size='large' onClick={handleClose}>
@@ -190,21 +383,34 @@ function FormDialog() {
   );
 }
 
-function RowRadioButtonsGroup() {
+function CorrectAnswerRadioButtons({
+  correctAnswerError,
+  setCorrectAnswer,
+  correctAnswer,
+}) {
   return (
-    <FormControl sx={{ my: 2 }}>
-      <FormLabel id='demo-row-radio-buttons-group-label'>
+    <FormControl error={correctAnswerError.hasError} sx={{ my: 2 }}>
+      <FormLabel id='correct-answer-radio-buttons-group-label'>
         Correct Answer
       </FormLabel>
+      {correctAnswerError.hasError && (
+        <Typography variant='body2' color='red'>
+          {correctAnswerError.error}
+        </Typography>
+      )}
       <RadioGroup
         row
-        aria-labelledby='demo-row-radio-buttons-group-label'
-        name='row-radio-buttons-group'
+        aria-labelledby='correct-answer-radio-buttons-group-label'
+        name='correct-answer-radio-buttons-group'
+        value={correctAnswer}
+        onChange={(e) => {
+          setCorrectAnswer(e.target.value);
+        }}
       >
-        <FormControlLabel value='female' control={<Radio />} label='1' />
-        <FormControlLabel value='male' control={<Radio />} label='2' />
-        <FormControlLabel value='other' control={<Radio />} label='3' />
-        <FormControlLabel value='' control={<Radio />} label='4' />
+        <FormControlLabel value='1' control={<Radio />} label='1' />
+        <FormControlLabel value='2' control={<Radio />} label='2' />
+        <FormControlLabel value='3' control={<Radio />} label='3' />
+        <FormControlLabel value='4' control={<Radio />} label='4' />
       </RadioGroup>
     </FormControl>
   );

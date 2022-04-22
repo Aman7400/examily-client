@@ -1,6 +1,7 @@
 import * as React from 'react';
 
-import { Box, IconButton, Stack } from '@mui/material';
+import { Alert, Box, IconButton, Stack } from '@mui/material';
+import { add, remove } from '../../redux/slices/questions';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Accordion from '@mui/material/Accordion';
@@ -10,9 +11,16 @@ import { Icon } from '@iconify/react';
 import Typography from '@mui/material/Typography';
 
 const ExpandMoreIcon = <Icon icon='flat-color-icons:expand' />;
+
 export default function SimpleAccordion() {
   const questions = useSelector((state) => state.questions.value);
+  const dispatch = useDispatch();
   console.log({ questions });
+
+  const handleDelete = (pos) => {
+    dispatch(remove({ pos }));
+  };
+
   return questions.length > 0 ? (
     <div>
       {questions.map((q, i) => (
@@ -24,16 +32,31 @@ export default function SimpleAccordion() {
           </AccordionSummary>
           <AccordionDetails sx={{ p: 2 }}>
             {q.options.map((opt, _i) => (
-              <p key={_i}>{opt}</p>
+              <p key={_i}>
+                <span
+                  style={{
+                    marginRight: '.5rem',
+                    display: 'inline-block',
+                    width: '1rem',
+                  }}
+                >
+                  {_i + 1})
+                </span>
+
+                {opt}
+              </p>
             ))}
             <Stack direction='row' sx={{ alignItems: 'center' }}>
-              <Typography sx={{ flexGrow: 1 }} variant='body1'>
-                Correct Answer : {q.correctAnswer}
+              <Typography
+                sx={{ flexGrow: 1, fontWeight: 'bold' }}
+                variant='body1'
+              >
+                Correct Answer : Option {q.correctAnswer}
               </Typography>
-              <IconButton>
+              {/* <IconButton>
                 <Icon icon='clarity:edit-solid' />
-              </IconButton>
-              <IconButton>
+              </IconButton> */}
+              <IconButton onClick={() => handleDelete(i)}>
                 <Icon icon='fluent:delete-20-filled' />
               </IconButton>
             </Stack>
@@ -42,6 +65,8 @@ export default function SimpleAccordion() {
       ))}
     </div>
   ) : (
-    <p>No questions</p>
+    <Alert severity='info' sx={{ maxWidth: 480 }}>
+      No questions added.
+    </Alert>
   );
 }
