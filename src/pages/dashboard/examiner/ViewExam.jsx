@@ -42,22 +42,22 @@ const ViewExam = () => {
       {/* Heading */}
       <Stack direction='row' sx={{ mb: 2 }}>
         <Box sx={{ flexGrow: 1 }}>
-          <Typography variant='h3'>Exam Details {examDetails?.name}</Typography>
-          <Typography variant='body1'>
-            *All exams are urs are Required
+          <Typography variant='h3'>
+            Exam Details - {examDetails?.name}
           </Typography>
+          <Typography variant='body1'>{examDetails.description}</Typography>
         </Box>
       </Stack>
       {/* Metrics */}
       <Grid container spacing={5} sx={{ width: '100%' }}>
-        {/* Total Exams */}
+        {/* Total Questions */}
         <Grid item xs={12} md={6} lg={4}>
           <Card sx={{ p: 5 }}>
             <Typography variant='h6'>Total Questions</Typography>
             <Typography variant='h2'>{examDetails.questions.length}</Typography>
           </Card>
         </Grid>
-        {/* Total Something */}
+        {/* Total Students */}
         <Grid item xs={12} md={6} lg={4}>
           <Card sx={{ p: 5 }}>
             <Typography variant='h6'>Total Students attempted</Typography>
@@ -66,11 +66,17 @@ const ViewExam = () => {
             </Typography>
           </Card>
         </Grid>
-        {/* Total Something */}
+        {/* Total Avg Score */}
         <Grid item xs={12} md={6} lg={4}>
           <Card sx={{ p: 5 }}>
             <Typography variant='h6'>Total Average Score</Typography>
             <Typography variant='h2'>{examDetails?.avgScore || 0}</Typography>
+          </Card>
+        </Grid>
+        {/* Score Board */}
+        <Grid item xs={12} md={8}>
+          <Card sx={{ p: 5 }}>
+            <Typography variant='h2'>Scorecard goes here</Typography>
           </Card>
         </Grid>
       </Grid>

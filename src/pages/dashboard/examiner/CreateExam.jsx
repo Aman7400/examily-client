@@ -26,7 +26,7 @@ import {
   LocalizationProvider,
 } from '@mui/lab';
 import React, { useState } from 'react';
-import { add, remove } from '../../../redux/slices/questions';
+import { add, empty } from '../../../redux/slices/questions';
 import { compareAsc, format } from 'date-fns';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -43,6 +43,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 const CreateExam = () => {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [startsOn, setStartsOn] = useState(new Date());
   const [endsOn, setEndsOn] = useState(new Date());
@@ -111,6 +112,8 @@ const CreateExam = () => {
       console.log(res);
 
       enqueueSnackbar(res.data.message, { variant: 'success' });
+      // * Remove Questions
+      dispatch(empty());
       navigate(examiner.home);
 
       // if()

@@ -56,6 +56,7 @@ const LoginForm = () => {
       localStorage.setItem('token', res.data.token);
       enqueueSnackbar(res.data.message, { variant: 'success' });
       reset({ email: '', password: '' });
+      console.log(res.data.userType === 'Examiner');
       if (res.data.userType === 'Examiner') {
         navigate(examiner.home);
       } else {

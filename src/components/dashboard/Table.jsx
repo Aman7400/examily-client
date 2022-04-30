@@ -37,11 +37,11 @@ export default function BasicTable({ allExams }) {
       <Table sx={{ minWidth: 650 }} aria-label='simple table'>
         <TableHead>
           <TableRow>
-            <TableCell>Sno</TableCell>
-            <TableCell align='right'>Name</TableCell>
-            <TableCell align='right'>Description</TableCell>
+            <TableCell>S.No</TableCell>
+            <TableCell align='center'>Name</TableCell>
+            <TableCell align='center'>Description</TableCell>
             <TableCell align='right'>Total Questions</TableCell>
-            <TableCell align='right'>Status</TableCell>
+            <TableCell align='center'>Status</TableCell>
             <TableCell align='right'>Attempted By</TableCell>
             <TableCell align='right'></TableCell>
           </TableRow>
@@ -56,22 +56,16 @@ export default function BasicTable({ allExams }) {
                 <TableCell component='th' scope='row'>
                   {i + 1}
                 </TableCell>
-                <TableCell align='right'>{exam.name}</TableCell>
-                <TableCell align='right'>{exam.description}</TableCell>
+                <TableCell align='center'>{exam.name}</TableCell>
+                <TableCell align='center'>{exam.description}</TableCell>
                 <TableCell align='right'>{exam.questions.length}</TableCell>
-                <TableCell align='right'>
+                <TableCell align='center'>
                   <span style={getStatusStyles(exam.status)}>
-                    {exam.status}
+                    {exam.status || 'active'}
                   </span>
                 </TableCell>
                 <TableCell align='right'>{exam.attemptedBy.length}</TableCell>
                 <TableCell align='right'>
-                  {/* <Button
-                    endIcon={<Icon icon='clarity:details-line' />}
-                    onClick={() => handleViewDetails(exam._id)}
-                  >
-                    View Details
-                  </Button> */}
                   <MoreOptionsMenu
                     viewDetails={() => handleViewDetails(exam._id)}
                   />

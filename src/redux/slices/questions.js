@@ -17,12 +17,12 @@ export const questionSlice = createSlice({
       const temp = state.value.filter((q, i) => i !== pos);
       state.value = [...temp];
     },
-    update: (state, { payload }) => {
-      state.value;
+    empty: (state) => {
+      state.value = [];
     },
   },
 });
 
-export const { add, remove, update } = questionSlice.actions;
+export const { add, remove, empty } = questionSlice.actions;
 
 export default questionSlice.reducer;
