@@ -20,24 +20,110 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { DesktopDatePicker, LocalizationProvider } from '@mui/lab';
+import {
+  DesktopDatePicker,
+  LoadingButton,
+  LocalizationProvider,
+} from '@mui/lab';
+import React, { useState } from 'react';
 import { add, remove } from '../../../redux/slices/questions';
+import { compareAsc, format } from 'date-fns';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { Icon } from '@iconify/react';
-import React from 'react';
 import SimpleAccordion from '../../../components/dashboard/Accordion';
+import axios from 'axios';
+import { examiner } from '../../../utils/routes';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 const CreateExam = () => {
-  const [value, setValue] = React.useState(new Date());
+  const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
 
-  const handleChange = (newValue) => {
-    setValue(newValue);
+  const [startsOn, setStartsOn] = useState(new Date());
+  const [endsOn, setEndsOn] = useState(new Date());
+
+  const questions = useSelector((state) => state.questions.value);
+
+  // * Create Exam Schema
+
+  const examSchema = yup
+    .object({
+      name: yup.string().required('Quiz Name is required'),
+      description: yup.string(),
+    })
+    .required();
+
+  const {
+    register,
+    handleSubmit,
+
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: yupResolver(examSchema),
+  });
+
+  // * Handle Create Exam ;
+  const onSubmit = async ({ name, description }) => {
+    console.log(startsOn, endsOn);
+    try {
+      if (questions.length < 1) {
+        return enqueueSnackbar('Please Add Questions.', { variant: 'warning' });
+      }
+
+      // * Date Checking
+      const result = compareAsc(startsOn, endsOn);
+      if (result === 1) {
+        // * if end date is before start date
+        return enqueueSnackbar('End Date cannot be less than Start Date', {
+          variant: 'error',
+        });
+      }
+
+      console.log('Expre in', format(endsOn, 'dd/MM/yyyy'));
+
+      const examObject = {
+        name,
+        description,
+        questions,
+        endsOn: format(endsOn, 'dd/MM/yyyy'),
+        startsOn: format(startsOn, 'dd/MM/yyyy'),
+      };
+
+      const token = localStorage.getItem('token');
+
+      const url = `${import.meta.env.VITE_BACKEND_URL}/exams/create`;
+
+      const res = await axios.post(
+        url,
+        {
+          examObject,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log(res);
+
+      enqueueSnackbar(res.data.message, { variant: 'success' });
+      navigate(examiner.home);
+
+      // if()
+    } catch (error) {
+      console.log(error);
+      enqueueSnackbar(error?.response?.data.message || error.message, {
+        variant: 'error',
+      });
+    }
   };
+
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Box sx={{ p: 10 }}>
@@ -47,25 +133,44 @@ const CreateExam = () => {
             <Typography variant='body1'>*All Fields are Required</Typography>
           </Box>
           <Box>
-            <Button variant='contained' size='large'>
+            <LoadingButton
+              onClick={handleSubmit(onSubmit)}
+              loading={isSubmitting}
+              variant='contained'
+              size='large'
+            >
               Create
-            </Button>
+            </LoadingButton>
           </Box>
         </Stack>
         <Card sx={{ p: 5 }} component={Paper}>
           <Grid container spacing={5}>
             <Grid item xs={12} md={6} lg={4}>
-              <TextField fullWidth label='Name*' />
+              <TextField
+                {...register('name')}
+                error={Boolean(errors.name?.message)}
+                helperText={errors.name?.message}
+                fullWidth
+                label='Name*'
+              />
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
-              <TextField fullWidth label='Description' />
+              <TextField
+                fullWidth
+                {...register('description')}
+                error={Boolean(errors.description?.message)}
+                helperText={errors.description?.message}
+                label='Description'
+              />
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <DesktopDatePicker
                 label='Starts On*'
                 inputFormat='dd/MM/yyyy'
-                value={value}
-                onChange={handleChange}
+                onChange={(newValue) => setStartsOn(newValue)}
+                name='startsOn'
+                value={startsOn}
+                minDate={new Date()}
                 renderInput={(params) => <TextField {...params} fullWidth />}
               />
             </Grid>
@@ -73,13 +178,15 @@ const CreateExam = () => {
               <DesktopDatePicker
                 label='Expires On*'
                 inputFormat='dd/MM/yyyy'
-                value={value}
-                onChange={handleChange}
+                onChange={(newValue) => setEndsOn(newValue)}
+                name='endsOn'
+                value={endsOn}
+                minDate={new Date()}
                 renderInput={(params) => <TextField {...params} fullWidth />}
               />
             </Grid>
           </Grid>
-          {/* Question Form */}
+          {/* Add Question Form */}
           <FormDialog />
           {/* Questions Accordion */}
           <SimpleAccordion />

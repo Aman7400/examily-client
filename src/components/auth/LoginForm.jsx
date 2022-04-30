@@ -48,12 +48,11 @@ const LoginForm = () => {
   const onSubmit = async (data) => {
     console.log(data);
     try {
-      console.log(import.meta.env.VITE_BACKEND_URL);
       const res = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/auth/login`,
         data
       );
-      console.log(res);
+
       localStorage.setItem('token', res.data.token);
       enqueueSnackbar(res.data.message, { variant: 'success' });
       reset({ email: '', password: '' });
