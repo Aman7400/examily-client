@@ -11,6 +11,7 @@ import NotFound from './pages/dashboard/NotFound';
 import React from 'react';
 import Register from './pages/Register';
 import UnAuthorised from './pages/dashboard/UnAuthorised';
+import ViewExam from './pages/dashboard/examiner/ViewExam';
 
 // TODO - Add Responsive CSS
 // TODO - Create distant Student n Examiner Route
@@ -31,6 +32,7 @@ const App = () => {
           {/* Examiner Route */}
           <Route path={examiner.home} element={<Home />} />
           <Route path={examiner.createTest} element={<CreateExam />} />
+          <Route path={examiner.viewTest} element={<ViewExam />} />
           {/* Unauthorized */}
           <Route path='/unauthorised' element={<UnAuthorised />} />
           {/* FallBacks */}

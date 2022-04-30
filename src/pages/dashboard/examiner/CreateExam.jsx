@@ -84,8 +84,6 @@ const CreateExam = () => {
         });
       }
 
-      console.log('Expre in', format(endsOn, 'dd/MM/yyyy'));
-
       const examObject = {
         name,
         description,

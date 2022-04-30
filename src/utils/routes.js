@@ -7,6 +7,7 @@ const student = {
 const examiner = {
   home: '/examiner/home', // * Dashboard Home - Examiner
   createTest: '/examiner/test/new', // * Create a test
+  viewTest: '/examiner/exams-details/:examId', // * view a test
 };
 
 const general = {

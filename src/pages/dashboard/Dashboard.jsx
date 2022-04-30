@@ -46,7 +46,7 @@ const Dashboard = () => {
     <Box sx={{ width: '100%', minHeight: '100vh' }}>
       <Navbar user={userProfile} />
       <div>
-        <Outlet />
+        <Outlet context={{ user: userProfile }} />
       </div>
     </Box>
   );
