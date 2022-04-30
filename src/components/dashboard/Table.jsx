@@ -1,6 +1,7 @@
 import * as React from 'react';
 
-import { Button } from '@mui/material';
+import { Button, IconButton, Menu, MenuItem } from '@mui/material';
+
 import { Icon } from '@iconify/react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -9,6 +10,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import { getStatusStyles } from '../../utils/helpers';
 import { useNavigate } from 'react-router-dom';
 
 function createData(name, calories, fat, carbs, protein) {
@@ -57,20 +59,64 @@ export default function BasicTable({ allExams }) {
                 <TableCell align='right'>{exam.name}</TableCell>
                 <TableCell align='right'>{exam.description}</TableCell>
                 <TableCell align='right'>{exam.questions.length}</TableCell>
-                <TableCell align='right'>{exam.status}</TableCell>
+                <TableCell align='right'>
+                  <span style={getStatusStyles(exam.status)}>
+                    {exam.status}
+                  </span>
+                </TableCell>
                 <TableCell align='right'>{exam.attemptedBy.length}</TableCell>
                 <TableCell align='right'>
-                  <Button
+                  {/* <Button
                     endIcon={<Icon icon='clarity:details-line' />}
                     onClick={() => handleViewDetails(exam._id)}
                   >
                     View Details
-                  </Button>
+                  </Button> */}
+                  <MoreOptionsMenu
+                    viewDetails={() => handleViewDetails(exam._id)}
+                  />
                 </TableCell>
               </TableRow>
             ))}
         </TableBody>
       </Table>
     </TableContainer>
+  );
+}
+
+// * More options menu
+
+function MoreOptionsMenu({ viewDetails }) {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  return (
+    <div>
+      <IconButton
+        aria-controls={open ? 'more-option-menu' : undefined}
+        aria-haspopup='true'
+        aria-expanded={open ? 'true' : undefined}
+        onClick={handleClick}
+      >
+        <Icon icon='charm:menu-kebab' />
+      </IconButton>
+      <Menu
+        id='basic-menu'
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'more-option-menu',
+        }}
+      >
+        <MenuItem onClick={viewDetails}>View Details</MenuItem>
+      </Menu>
+    </div>
   );
 }
