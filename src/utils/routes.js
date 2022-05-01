@@ -1,7 +1,7 @@
 const student = {
   home: '/student/home', // * Dashboard Home - Student
   allTests: '/student/test/all', // * Dashboard All Tests for student
-  takeTest: '/student/test/:id', // * Take a test
+  takeTest: '/student/test/:examId', // * Take a test
 };
 
 const examiner = {

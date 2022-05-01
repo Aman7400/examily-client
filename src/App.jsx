@@ -10,6 +10,9 @@ import Login from './pages/Login';
 import NotFound from './pages/dashboard/NotFound';
 import React from 'react';
 import Register from './pages/Register';
+import StudentAllTests from './pages/dashboard/student/StudentAllTests';
+import StudentHome from './pages/dashboard/student/StudentHome';
+import TakeExam from './pages/dashboard/student/TakeExam';
 import UnAuthorised from './pages/dashboard/UnAuthorised';
 import ViewExam from './pages/dashboard/examiner/ViewExam';
 
@@ -25,9 +28,9 @@ const App = () => {
           <Route path={general.profile} element={<p>Ur Profile</p>} />
 
           {/* Student Route */}
-          <Route path={student.home} element={<p>Student Home</p>} />
-          <Route path={student.allTests} element={<p>Student All Tests</p>} />
-          <Route path={student.takeTest} element={<p>Student Take Test</p>} />
+          <Route path={student.home} element={<StudentHome />} />
+          <Route path={student.allTests} element={<StudentAllTests />} />
+          <Route path={student.takeTest} element={<TakeExam />} />
 
           {/* Examiner Route */}
           <Route path={examiner.home} element={<Home />} />
